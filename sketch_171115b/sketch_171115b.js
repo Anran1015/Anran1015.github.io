@@ -48,7 +48,7 @@ frameRate(20);
 
 
 function draw(){
-background(#cdfbf9);
+background(232,255,254);
 smooth();
   
 
