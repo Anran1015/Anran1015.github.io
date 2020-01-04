@@ -23,7 +23,7 @@ var col;
 var s;
 
 function setup() {
-  createCanvas(450,450);
+  createCanvas(500,500);
   colourPalette=[
 color(157, 250, 254),
 color(241, 82, 156),
@@ -48,7 +48,7 @@ frameRate(20);
 
 
 function draw(){
-background(235, 253, 255);
+background(#cdfbf9);
 smooth();
   
 
