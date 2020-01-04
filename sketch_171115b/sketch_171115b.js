@@ -23,7 +23,7 @@ var col;
 var s;
 
 function setup() {
-  createCanvas(500,500);
+  createCanvas(600,600);
   colourPalette=[
 color(157, 250, 254),
 color(241, 82, 156),
