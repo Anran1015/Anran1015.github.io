@@ -13,7 +13,7 @@
 
 
 var rects = [];
-var numrects = 20;
+var numrects = 26;
 var rec;
 var speed;
 var rad;
