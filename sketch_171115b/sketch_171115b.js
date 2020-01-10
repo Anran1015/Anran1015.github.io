@@ -13,7 +13,7 @@
 
 
 var rects = [];
-var numrects = 26;
+var numrects = 20;
 var rec;
 var speed;
 var rad;
@@ -23,7 +23,7 @@ var col;
 var s;
 
 function setup() {
-  createCanvas(550,550);
+  createCanvas(500,500);
   colourPalette=[
 color(157, 250, 254),
 color(241, 82, 156),
@@ -48,7 +48,7 @@ frameRate(20);
 
 
 function draw(){
-background(232,255,254);
+background(213, 243, 241, 54);
 smooth();
   
 
@@ -143,8 +143,8 @@ function rectObj(w,h, id){
           //if collide is true, change the position to another random value, 
           //means generate a new one on the screen
           if(this.hit == true){ 
-            this.x=random(600);
-            this.y =random(600);
+            this.x=random(500);
+            this.y =random(500);
 
           }
 
