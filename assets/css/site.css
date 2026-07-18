@@ -1079,21 +1079,19 @@ blockquote {
   width: 2.75rem;
   min-height: 2.75rem;
   place-items: center;
-  border-radius: 50%;
-  background: var(--color-text);
-  color: var(--color-bg);
+  margin-inline: -0.75rem;
+  color: #000;
   text-decoration: none;
 }
 
 .social-link:hover {
-  background: var(--color-text-muted);
-  color: var(--color-bg);
+  color: #000;
 }
 
 .social-link__icon {
-  width: 1.35rem;
-  height: 1.35rem;
-  fill: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: currentColor;
   stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -1106,38 +1104,65 @@ blockquote {
 }
 
 .site-footer {
-  background: var(--color-bg);
+  height: 20rem;
+  margin-top: 0.375rem;
+  background: #f2f1f8;
+  color: #2b2b2b;
 }
 
 .site-footer__inner {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: var(--space-6);
+  display: block;
   width: min(100%, var(--content-width));
   margin-inline: auto;
-  padding: var(--space-8) var(--space-6);
+  padding: 2.4375rem 1.0625rem 0.875rem;
 }
 
 .site-footer p {
-  margin-block: 0 var(--space-2);
+  margin: 0;
 }
 
-.site-footer__message p:last-child {
-  margin-block-end: 0;
+.site-footer__message {
+  width: calc(50% - 1.0625rem);
+  margin-inline: auto;
+  color: rgb(0 0 0 / 71%);
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  text-align: center;
 }
 
 .site-footer__actions {
   display: grid;
-  justify-items: end;
-  gap: var(--space-4);
+  justify-items: center;
+  margin-top: 3.0625rem;
 }
 
 .site-footer__links {
   display: flex;
   flex-wrap: wrap;
-  justify-content: end;
-  gap: var(--space-2);
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 3.5625rem;
+}
+
+.site-footer .sqs-block-button-element {
+  display: block;
+  border: 0;
+  background: #fff;
+  color: #000;
+}
+
+.site-footer .social-link {
+  position: relative;
+  width: 1.25rem;
+  min-height: 1.25rem;
+  margin-inline: 0;
+}
+
+.site-footer .social-link::after {
+  position: absolute;
+  inset: -0.75rem;
+  content: "";
 }
 
 .missing-media {
@@ -1302,15 +1327,27 @@ blockquote {
   }
 
   .site-footer__inner {
-    grid-template-columns: 1fr;
+    min-height: 0;
+    padding-top: 3.5rem;
+  }
+
+  .site-footer {
+    height: 24.75rem;
+    margin-top: 2.8125rem;
+  }
+
+  .site-footer__message {
+    width: 100%;
   }
 
   .site-footer__actions {
-    justify-items: start;
+    justify-items: center;
+    margin-top: 3.0625rem;
   }
 
   .site-footer__links {
-    justify-content: start;
+    justify-content: center;
+    margin-top: 4.5625rem;
   }
 }
 
