@@ -23,7 +23,9 @@ var col;
 var s;
 
 function setup() {
-  createCanvas(500,500);
+  var canvas = createCanvas(500,500);
+  canvas.parent("sketch-canvas");
+  canvas.elt.setAttribute("aria-hidden", "true");
   colourPalette=[
 color(157, 250, 254),
 color(241, 82, 156),
@@ -182,5 +184,3 @@ function rectObj(w,h, id){
   }
 
 }
-
-
