@@ -38,6 +38,7 @@
     const count = gallery.querySelector("[data-gallery-count]");
     const thumbs = Array.from(gallery.querySelectorAll("[data-gallery-thumb]"));
     let activeIndex = 0;
+    let autoplayTimer;
 
     const showSlide = (index, announce = true) => {
       activeIndex = Math.max(0, Math.min(index, slides.length - 1));
@@ -78,6 +79,117 @@
     });
 
     showSlide(0, false);
+
+    if (
+      gallery.hasAttribute("data-gallery-autoplay") &&
+      slides.length > 1 &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      const stopAutoplay = () => window.clearInterval(autoplayTimer);
+      const startAutoplay = () => {
+        stopAutoplay();
+        autoplayTimer = window.setInterval(() => {
+          showSlide((activeIndex + 1) % slides.length, false);
+        }, 5000);
+      };
+      gallery.addEventListener("pointerenter", stopAutoplay);
+      gallery.addEventListener("pointerleave", startAutoplay);
+      gallery.addEventListener("focusin", stopAutoplay);
+      gallery.addEventListener("focusout", startAutoplay);
+      startAutoplay();
+    }
+  });
+
+  document.querySelectorAll("[data-strip-carousel]").forEach((carousel) => {
+    const viewport = carousel.querySelector("[data-strip-viewport]");
+    const previous = carousel.querySelector("[data-strip-previous]");
+    const next = carousel.querySelector("[data-strip-next]");
+    const status = carousel.querySelector("[data-strip-status]");
+    const slides = Array.from(carousel.querySelectorAll(".media-carousel__slide"));
+    if (!viewport || !slides.length) return;
+
+    const dimensions = () => {
+      const slideWidth = slides[0].getBoundingClientRect().width;
+      const track = slides[0].parentElement;
+      const gap = track ? parseFloat(getComputedStyle(track).columnGap) || 0 : 0;
+      const step = slideWidth + gap;
+      const visible = Math.max(1, Math.round((viewport.clientWidth + gap) / step));
+      return { step, visible };
+    };
+
+    const update = () => {
+      const { step, visible } = dimensions();
+      const index = step ? Math.round(viewport.scrollLeft / step) : 0;
+      const lastVisible = Math.min(slides.length, index + visible);
+      if (status) {
+        status.textContent = `${index + 1}–${lastVisible} of ${slides.length}`;
+      }
+      if (previous) previous.disabled = index <= 0;
+      if (next) next.disabled = lastVisible >= slides.length;
+    };
+
+    const move = (direction) => {
+      const { step, visible } = dimensions();
+      viewport.scrollBy({ left: direction * step * visible, behavior: "smooth" });
+    };
+
+    previous?.addEventListener("click", () => move(-1));
+    next?.addEventListener("click", () => move(1));
+    viewport.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        move(-1);
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        move(1);
+      } else if (event.key === "Home") {
+        event.preventDefault();
+        viewport.scrollTo({ left: 0, behavior: "smooth" });
+      } else if (event.key === "End") {
+        event.preventDefault();
+        viewport.scrollTo({ left: viewport.scrollWidth, behavior: "smooth" });
+      }
+    });
+
+    let scrollFrame;
+    viewport.addEventListener("scroll", () => {
+      window.cancelAnimationFrame(scrollFrame);
+      scrollFrame = window.requestAnimationFrame(update);
+    });
+    window.addEventListener("resize", update);
+    update();
+  });
+
+  document.querySelectorAll("[data-masonry]").forEach((listing) => {
+    const items = Array.from(listing.querySelectorAll("[data-masonry-item]"));
+    if (!items.length) return;
+
+    const layout = () => {
+      const width = listing.clientWidth;
+      const columnCount = width < 32 * 16 ? 1 : width < 48 * 16 ? 2 : 4;
+      const gap = 12;
+      const columnWidth = (width - gap * (columnCount - 1)) / columnCount;
+      const heights = Array(columnCount).fill(0);
+
+      items.forEach((item) => {
+        item.style.width = `${columnWidth}px`;
+      });
+      items.forEach((item) => {
+        const column = heights.indexOf(Math.min(...heights));
+        item.style.transform = `translate(${column * (columnWidth + gap)}px, ${heights[column]}px)`;
+        heights[column] += item.getBoundingClientRect().height + gap;
+      });
+      listing.style.height = `${Math.max(...heights, 0)}px`;
+    };
+
+    items.forEach((item) => {
+      item.querySelectorAll("img").forEach((image) => {
+        if (!image.complete) image.addEventListener("load", layout, { once: true });
+      });
+    });
+    document.fonts?.ready.then(layout);
+    window.addEventListener("resize", layout);
+    window.requestAnimationFrame(layout);
   });
 
   document.querySelectorAll('a[target="_blank"]').forEach((link) => {
